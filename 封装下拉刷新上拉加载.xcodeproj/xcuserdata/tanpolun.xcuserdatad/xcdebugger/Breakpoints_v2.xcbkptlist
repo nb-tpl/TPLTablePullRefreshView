@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c01;&#x88c5;&#x4e0b;&#x62c9;&#x5237;&#x65b0;&#x4e0a;&#x62c9;&#x52a0;&#x8f7d;/TPLTableViewPullRefresh/Classes/View/TPLTablePullRefreshView.m"
+            timestampString = "442490086.918565"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "504"
+            endingLineNumber = "504"
+            landmarkName = "+imageArrayFromImageFile:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c01;&#x88c5;&#x4e0b;&#x62c9;&#x5237;&#x65b0;&#x4e0a;&#x62c9;&#x52a0;&#x8f7d;/TPLTableViewPullRefresh/Classes/View/TPLTablePullRefreshView.m"
+            timestampString = "442490086.918565"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "525"
+            endingLineNumber = "525"
+            landmarkName = "+imageArrayFromImageFile:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x5c01;&#x88c5;&#x4e0b;&#x62c9;&#x5237;&#x65b0;&#x4e0a;&#x62c9;&#x52a0;&#x8f7d;/TPLTableViewPullRefresh/Classes/View/TPLTablePullRefreshView.m"
+            timestampString = "442489250.988922"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "-observeValueForKeyPath:ofObject:change:context:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

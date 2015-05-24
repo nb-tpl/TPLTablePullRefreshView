@@ -1,0 +1,64 @@
+//
+//  TPLRefreshTableView.h
+//  GoDataing_LYBT
+//
+//  Created by NB_TPL on 14-4-14.
+//  Copyright (c) 2014年 艾广华. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+
+
+typedef enum{
+    TPLPullRefreshPulling = 0,
+    TPLPullRefreshNormal,
+    TPLPullRefreshLoading,
+} TPLPullRefreshState;
+
+typedef enum
+{
+    TPLPullRefreshViewStyleHeader = 0,
+    TPLPullRefreshViewStyleFooter,
+}TPLPullRefreshViewStyle;
+
+
+@protocol TPLRefreshTablePullViewDelegate;
+@interface TPLRefreshTablePullView : UIView
+{
+    
+    NSMutableArray * _imageArray;
+    
+    
+    TPLPullRefreshState _state;
+    //headerView还是footerView
+    TPLPullRefreshViewStyle _viewStyle;
+    UILabel *_lastUpdatedLabel;
+    UILabel *_statusLabel;
+    CALayer *_arrowImage;
+    UIActivityIndicatorView *_activityView;
+    
+}
+
+@property(nonatomic,weak) id<TPLRefreshTablePullViewDelegate> delegate;
+@property(nonatomic,assign)TPLPullRefreshViewStyle  viewStyle;
+@property(nonatomic,assign)UIEdgeInsets contentInsets;
+
+- (id)initWithFrame:(CGRect)frame arrowImageName:(NSString *)arrow textColor:(UIColor *)textColor viewStyle:(TPLPullRefreshViewStyle)viewStyle;
+-(id)initWithFrame:(CGRect)frame viewStyle:(TPLPullRefreshViewStyle)viewStyle;
+
+- (void)refreshHeaderLastUpdatedDate;
+- (void)refreshFooterLastUpdatedDate;
+- (void)tplRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
+- (void)tplRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView;
+- (void)tplRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
+- (void)tplRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView withContentInset :(UIEdgeInsets)contentInset;
+@end
+
+@protocol TPLRefreshTablePullViewDelegate
+- (void)tplRefreshTablePullViewDidTriggerRefresh:(TPLRefreshTablePullView *)view;
+- (BOOL)tplRefreshTablePullViewDataSourceIsLoading:(TPLRefreshTablePullView *)view;
+@optional
+- (NSDate*)tplRefreshTablePullViewDataSourceLastUpdated:(TPLRefreshTablePullView *)view;
+
+@end
