@@ -33,7 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _rowCount = 20;
+    _rowCount = 5;
     // Do any additional setup after loading the view, typically from a nib.
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, self.view.bounds.size.width, self.view.frame.size.height - 20) style:UITableViewStylePlain];

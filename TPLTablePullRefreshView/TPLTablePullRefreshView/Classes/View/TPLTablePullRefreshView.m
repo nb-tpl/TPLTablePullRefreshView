@@ -18,6 +18,7 @@
 
 
 #define compare_tempValue 8
+#define dealocInfo //NSLog(@"%@ 释放了",[self class])
 
 #import "TPLTablePullRefreshView.h"
 #import <ImageIO/ImageIO.h>
@@ -35,6 +36,11 @@
     CGFloat _totalHeight;
     CGFloat _loadingAnimationDuration;
     
+    
+    UIEdgeInsets _scrollViewEdgeInsets;
+    
+    BOOL _canAddMore;
+    
 }
 
 @end
@@ -45,9 +51,9 @@
 
 -(void)dealloc
 {
-    [_scrollView removeObserver:self forKeyPath:@"contentOffset"];
-    [_scrollView removeObserver:self forKeyPath:@"contentSize"];
+    [self cleanScrollViewKVO];
     
+//    dealocInfo;
 }
 
 
@@ -57,6 +63,7 @@
     if (self)
     {
         //init
+        _canAddMore = YES;
         _loading = NO;
         _beginAnimation = YES;
         _style = style_default;
@@ -98,7 +105,7 @@
         
         
         //test
-        self.backgroundColor = [UIColor greenColor];
+//        self.backgroundColor = [UIColor greenColor];
         
     }
     return self;
@@ -110,19 +117,18 @@
 //设定管理的TableView
 -(void)setScrollView:(UIScrollView *)scrollView
 {
-    if ([_scrollView isEqual:_scrollView])
+    _scrollViewEdgeInsets = scrollView.contentInset;
+    if ([_scrollView isEqual:scrollView])
     {
         return;
     }
-    
-    [_scrollView removeObserver: self forKeyPath: @"contentOffset"];
+    [self cleanScrollViewKVO];
     
     _scrollView = scrollView;
     
     [_scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context: nil];
     [_scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
 
-    
     [self updateFrame];
 }
 //设定高度
@@ -240,10 +246,10 @@
     {
         CGPoint contentOffset = [change[@"new"] CGPointValue];
         
-        //    NSLog(@"thread = %@ main = %@",[NSThread currentThread],[NSThread mainThread]);
-        //    NSLog(@"change %@",change);
-        //    NSLog(@"contentOffset = %@",NSStringFromCGPoint(contentOffset));
-        //    NSLog(@"scrollViewContentSize = %@",NSStringFromCGSize(_scrollView.contentSize));
+        //    //NSLog(@"thread = %@ main = %@",[NSThread currentThread],[NSThread mainThread]);
+        //    //NSLog(@"change %@",change);
+        //    //NSLog(@"contentOffset = %@",NSStringFromCGPoint(contentOffset));
+        //    //NSLog(@"scrollViewContentSize = %@",NSStringFromCGSize(_scrollView.contentSize));
         
         //是头视图还是底部视图
         if(TPLTablePullRefreshViewHeaderStyle == _style)
@@ -251,7 +257,7 @@
             if (contentOffset.y < 0)//下拉动画
             {
                 int i = abs((int)contentOffset.y)/_pullTransHeight;
-                //        NSLog(@"i = %d",i);
+                //        //NSLog(@"i = %d",i);
                 i = i >= _pullImageArray.count ? (int)_pullImageArray.count - 1 : i;
                 _pullImageView.image = [_pullImageArray objectAtIndex:i];
             }
@@ -297,14 +303,14 @@
             if ( pullDownValue > 0)//上拉动画
             {
                 int i = abs((int)pullDownValue)/_pullTransHeight;
-                //        NSLog(@"i = %d",i);
+                //        //NSLog(@"i = %d",i);
                 i = i >= _pullImageArray.count ? (int)_pullImageArray.count - 1 : i;
                 _pullImageView.image = [_pullImageArray objectAtIndex:i];
             }
             
             
-            //        NSLog(@"_scrollView frame = %@",NSStringFromCGRect(_scrollView.frame));
-//            NSLog(@"OK = %f , %f",(contentOffset.y + _scrollView.frame.size.height) - temp,_visibleHeight);
+            //        //NSLog(@"_scrollView frame = %@",NSStringFromCGRect(_scrollView.frame));
+//            //NSLog(@"OK = %f , %f",(contentOffset.y + _scrollView.frame.size.height) - temp,_visibleHeight);
             
 
             CGFloat value = ((contentOffset.y + _scrollView.frame.size.height) - temp ) - _visibleHeight;
@@ -357,7 +363,7 @@
     if (refreshing)
     {
         _textLabel.text = self.textLoading;
-        _scrollView.contentInset = UIEdgeInsetsMake(_visibleHeight + compare_tempValue, 0.0f, 0.0f, 0.0f);
+        _scrollView.contentInset = UIEdgeInsetsMake(_visibleHeight + compare_tempValue + _scrollViewEdgeInsets.top, _scrollViewEdgeInsets.left, _scrollViewEdgeInsets.bottom, _scrollViewEdgeInsets.right);
         [UIView animateWithDuration:0.2 animations:^{
             _scrollView.contentOffset = CGPointMake(_scrollView.contentOffset.x, -_visibleHeight);
         
@@ -383,7 +389,7 @@
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
-        _scrollView.contentInset = UIEdgeInsetsMake(0, 0.0f, 0.0f, 0.0f);
+        _scrollView.contentInset = _scrollViewEdgeInsets;//UIEdgeInsetsMake(0, 0.0f, 0.0f, 0.0f);
         [UIView commitAnimations];
     }
 }
@@ -391,15 +397,18 @@
 -(void)adding:(BOOL)adding
 {
     _loading = adding;
+    if(!_canAddMore){
+        _loading = NO;
+    }
     if (adding)
     {
         [UIView animateWithDuration:0.2 animations:^{
             
-            _scrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, _visibleHeight + compare_tempValue, 0.0f);
+            _scrollView.contentInset = UIEdgeInsetsMake(_scrollViewEdgeInsets.top,_scrollViewEdgeInsets.left, _visibleHeight + compare_tempValue + _scrollViewEdgeInsets.bottom, 0.0f);
             
         } completion:^(BOOL finished)
          {
-             if (self.delegate && [self.delegate respondsToSelector:@selector(addMoreScrollView:TPLTablePullRefreshView:)])
+             if (self.delegate && [self.delegate respondsToSelector:@selector(addMoreScrollView:TPLTablePullRefreshView:)] && _canAddMore)
              {
                  [self.delegate addMoreScrollView:_scrollView TPLTablePullRefreshView:self];
              }
@@ -419,7 +428,7 @@
 
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
-        _scrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0, 0.0f);
+        _scrollView.contentInset = _scrollViewEdgeInsets;//UIEdgeInsetsMake(0.0f, 0.0f, 0, 0.0f);
         [UIView commitAnimations];
     }
 }
@@ -532,6 +541,16 @@
         [_scrollView addSubview:self];
     }
     
+    
+    //NSLog(@"contentSize = %@",NSStringFromCGSize(self.scrollView.contentSize));
+    if(self.scrollView.contentSize.height + self.scrollView.contentInset.top < self.scrollView.frame.size.height && self.style == TPLTablePullRefreshViewFooterStyle) {
+        self.hidden = YES;
+        _canAddMore = NO;
+    }else {
+        self.hidden = NO;
+        _canAddMore = YES;
+    }
+    
 }
 
 //更新数据
@@ -553,6 +572,14 @@
     _pullTransHeight = (_visibleHeight + compare_tempValue)/_pullImageArray.count;
 }
 
+//清除键值观察
+-(void)cleanScrollViewKVO
+{
+    [_scrollView removeObserver:self forKeyPath: @"contentOffset"];
+    [_scrollView removeObserver:self forKeyPath:@"contentSize"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 //获得tableView的高度,这样重复计算了总高度，不知道还有没有更好的方法
 -(CGFloat)getHeightFromTableView:(UITableView*)tableView
 {
@@ -560,6 +587,16 @@
     _totalHeight = 0;
     for (int i = 0; i < sectionCount; i++)
     {
+        if([tableView.delegate respondsToSelector:@selector(tableView:heightForHeaderInSection:)])
+        {
+            _totalHeight = _totalHeight + [tableView.delegate tableView:tableView heightForHeaderInSection:i];
+        }
+        
+        if([tableView.delegate respondsToSelector:@selector(tableView:heightForFooterInSection:)])
+        {
+            _totalHeight = _totalHeight + [tableView.delegate tableView:tableView heightForFooterInSection:i];
+        }
+
         NSInteger sectionRowCount = [tableView numberOfRowsInSection:i];
         for (int j = 0; j < sectionRowCount; j++)
         {
@@ -608,6 +645,10 @@
 +(NSMutableArray*)imageArrayFromImageFile:(NSString*)imageFilePath
 {
     NSData *imageData = [NSData dataWithContentsOfFile: imageFilePath];
+    if (imageData == nil)
+    {
+        return nil;
+    }
     NSMutableArray *frames = nil;
     CGImageSourceRef src = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
     if (src)
@@ -622,10 +663,12 @@
                 if (img) {
                     [frames addObject: [UIImage imageWithCGImage: img]];
                     CGImageRelease(img);
+                    
                 }
             }
         }
         
+        CFRelease(src);
     }
     
     return frames;
