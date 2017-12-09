@@ -221,6 +221,7 @@
 				TargetAttributes = {
 					3B7562741A5E624E00EE6AA6 = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = FN87A34J65;
 					};
 					3B75628D1A5E624F00EE6AA6 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -404,6 +405,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = FN87A34J65;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/TPLTablePullRefreshView/PrefixHeader.pch";
 				INFOPLIST_FILE = TPLTablePullRefreshView/Info.plist;
@@ -418,6 +420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = FN87A34J65;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/TPLTablePullRefreshView/PrefixHeader.pch";
 				INFOPLIST_FILE = TPLTablePullRefreshView/Info.plist;
