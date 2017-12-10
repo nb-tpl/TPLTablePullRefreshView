@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "TPLTablePullRefreshView"
-  s.version      = "0.0.1"
-  s.summary      = "下拉刷新上拉加载组件TPLTablePullRefreshView."
+  s.version      = "0.0.2"
+  s.summary      = "下拉刷新上拉加载组件"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                    一个能非常方便实现下拉刷新上拉加载的UI组件
+一个能非常方便实现下拉刷新上拉加载的UI组件
                    DESC
 
   s.homepage     = "https://github.com/nb-tpl/TPLTablePullRefreshView.git"
